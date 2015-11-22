@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Universal way to install docker on any distro
+
+# [Unit]
+# Requires=network.target docker.socket
+# After=docker.socket
+
+cat << EOF > /etc/systemd/system/docker.service
+
+[Service]
+ExecStartPre=/usr/bin/cp /home/vagrant/shared/docker /usr/bin/docker
+ExecStartPre=/usr/bin/chmod +x /usr/bin/docker
+ExecStart=/usr/bin/docker daemon
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable docker
+systemctl start docker
